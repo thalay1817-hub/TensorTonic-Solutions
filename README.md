@@ -328,6 +328,7 @@ Verified machine learning implementations completed on [TensorTonic](https://www
 | Shared-Memory Bank Conflict Analyzer | Analyze GPU shared-memory addresses by warp, reporting bank indices and the conflict degree for each access step. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/cs336-l05-shared-memory-bank-conflicts |
 | Masked Triton GELU Kernel | Implement masked tanh-approximate GELU in Triton for contiguous CUDA tensors, partial final blocks, and multiple dtypes. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/triton/cs336-l06-triton-masked-gelu |
 | Triton Row-Wise Softmax | Implement stable row-wise softmax in Triton for padded CUDA rows, partial tiles, and float32, float16, or bfloat16 data. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/triton/cs336-l06-triton-row-softmax |
+| Tiled Triton Row Sum | Implement tiled row reduction in Triton for strided CUDA tensors, fixed-width tiles, and float32 output sums. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/triton/cs336-l06-triton-tiled-row-sum |
 
 View my verified ML profile: [TensorTonic profile](https://www.tensortonic.com/profile/thalay)
 <!-- tensortonic:end -->
