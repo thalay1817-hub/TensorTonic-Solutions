@@ -326,6 +326,7 @@ Verified machine learning implementations completed on [TensorTonic](https://www
 | Global-Memory Coalescing Counter | Count the aligned cache lines touched by a warp's fixed-width global-memory accesses and measure useful transferred bytes. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/cs336-l05-global-memory-coalescing |
 | GPU Occupancy Calculator | Calculate resident blocks, resident warps, and occupancy from one block's resource use and one SM's limits. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/cs336-l05-gpu-occupancy-calculator |
 | Shared-Memory Bank Conflict Analyzer | Analyze GPU shared-memory addresses by warp, reporting bank indices and the conflict degree for each access step. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/cs336-l05-shared-memory-bank-conflicts |
+| Masked Triton GELU Kernel | Implement masked tanh-approximate GELU in Triton for contiguous CUDA tensors, partial final blocks, and multiple dtypes. | https://www.tensortonic.com/study-plans/language-modeling-from-scratch/triton/cs336-l06-triton-masked-gelu |
 
 View my verified ML profile: [TensorTonic profile](https://www.tensortonic.com/profile/thalay)
 <!-- tensortonic:end -->
