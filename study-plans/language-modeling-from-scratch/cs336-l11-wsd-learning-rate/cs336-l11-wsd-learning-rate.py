@@ -1,30 +1,31 @@
 import math
 import torch
 
-def wsd_learning_rate(
-    total_steps,
-    warmup_steps,
-    stable_steps,
-    peak_learning_rate,
-    final_ratio,
-):
-    decay_steps = total_steps - warmup_steps - stable_steps
+def wsd_learning_rate(total_steps, warmup_steps, stable_steps, peak_learning_rate, final_ratio):
+    T = total_steps
+    w = warmup_steps
+    s = stable_steps
+    d = T - w - s
 
     rates = []
 
-    for t in range(warmup_steps):
-        rates.append(peak_learning_rate * (t + 1) / warmup_steps)
+    # Warmup phase
+    for t in range(w):
+        eta = peak_learning_rate * (t + 1) / w
+        rates.append(eta)
 
-    for _ in range(stable_steps):
+    # Stable phase
+    for _ in range(s):
         rates.append(peak_learning_rate)
 
-    for j in range(decay_steps):
-        if decay_steps == 1:
-            pj = 1.0
+    # Decay phase
+    r = final_ratio
+    for j in range(d):
+        if d == 1:
+            p = 1.0
         else:
-            pj = j / (decay_steps - 1)
-        cosine_term = (1 + math.cos(math.pi * pj)) / 2
-        eta_j = peak_learning_rate * (final_ratio + (1 - final_ratio) * cosine_term)
-        rates.append(eta_j)
+            p = j / (d - 1)
+        eta = peak_learning_rate * (r + (1 - r) * (1 + math.cos(math.pi * p)) / 2)
+        rates.append(eta)
 
     return torch.tensor(rates, dtype=torch.float64)
