@@ -1,58 +1,62 @@
 import torch
 
-def speculative_sampling(
-    draft_tokens,
-    draft_probabilities,
-    target_probabilities,
-    acceptance_random_values,
-    residual_random_value,
-):
+def speculative_sampling(draft_tokens, draft_probabilities, target_probabilities,
+                                          acceptance_random_values, residual_random_value):
     device = draft_tokens.device
-    K = draft_tokens.shape[0]
+
+    dt = draft_tokens.detach().clone()
+    dp = draft_probabilities.detach().clone()
+    tp = target_probabilities.detach().clone()
+    ar = acceptance_random_values.detach().clone()
+
+    K = dt.shape[0]
 
     accepted_tokens = []
-    accepted_count = K
+    accepted_count = 0
     rejected_at = None
+    replacement_token = None
 
     for i in range(K):
-        xi = int(draft_tokens[i].item())
-        qi = float(draft_probabilities[i, xi].item())
-        pi = float(target_probabilities[i, xi].item())
+        xi = int(dt[i].item())
+        qi_xi = dp[i, xi].item()
+        pi_xi = tp[i, xi].item()
 
-        if qi == 0.0 and pi == 0.0:
-            a = 0.0
-        elif qi == 0.0:
-            a = 1.0
+        if qi_xi == 0.0 and pi_xi == 0.0:
+            acceptance = 0.0
+        elif qi_xi == 0.0:
+            acceptance = 1.0
         else:
-            a = min(1.0, pi / qi)
+            ratio = pi_xi / qi_xi
+            acceptance = ratio if ratio < 1.0 else 1.0
 
-        r_accept = float(acceptance_random_values[i].item())
+        r = ar[i].item()
 
-        if r_accept < a:
+        if r < acceptance:
             accepted_tokens.append(xi)
+            accepted_count += 1
         else:
             rejected_at = i
-            accepted_count = i
 
-            p_row = target_probabilities[i]
-            q_row = draft_probabilities[i]
-            residual = torch.clamp(p_row - q_row, min=0)
-            total = residual.sum()
+            p_row = tp[i].to(torch.float64)
+            q_row = dp[i].to(torch.float64)
+            diff = p_row - q_row
+            residual = torch.clamp(diff, min=0.0)
+            total = torch.sum(residual)
             normalized = residual / total
-            cdf = torch.cumsum(normalized, dim=0)
 
-            r_val = torch.tensor(
-                residual_random_value, dtype=cdf.dtype, device=cdf.device
-            )
-            idx = torch.searchsorted(cdf, r_val).item()
+            cumsum = torch.cumsum(normalized, dim=0)
+            idx = torch.searchsorted(cumsum, torch.tensor(residual_random_value, dtype=torch.float64))
+            replacement_token = int(idx.item())
 
-            accepted_tokens.append(int(idx))
             break
+
+    if replacement_token is not None:
+        accepted_tokens.append(replacement_token)
 
     tokens = torch.tensor(accepted_tokens, dtype=torch.int64, device=device)
 
     return {
         "tokens": tokens,
-        "accepted_count": int(accepted_count),
+        "accepted_count": accepted_count,
         "rejected_at": rejected_at,
     }
