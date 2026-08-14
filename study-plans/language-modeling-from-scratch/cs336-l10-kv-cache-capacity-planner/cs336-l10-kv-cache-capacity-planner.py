@@ -1,23 +1,16 @@
-def kv_cache_capacity_planner(
-    model_parameters,
-    bytes_per_parameter,
-    num_layers,
-    sequence_length,
-    num_attention_heads,
-    num_kv_heads,
-    head_dim,
-    bytes_per_element,
-    memory_per_gpu,
-    reserved_memory,
-    memory_bandwidth,
-):
+def kv_cache_capacity_planner(model_parameters, bytes_per_parameter, num_layers, sequence_length,
+                            num_attention_heads, num_kv_heads, head_dim, bytes_per_element,
+                            memory_per_gpu, reserved_memory, memory_bandwidth):
     model_bytes = model_parameters * bytes_per_parameter
-    kv_bytes_per_request = (
-        2 * num_layers * sequence_length * num_kv_heads * head_dim * bytes_per_element
-    )
+    kv_bytes_per_request = 2 * num_layers * sequence_length * num_kv_heads * head_dim * bytes_per_element
 
     available = memory_per_gpu - reserved_memory - model_bytes
-    max_batch_size = max(0, available // kv_bytes_per_request)
+    if available < 0:
+        max_batch_size = 0
+    else:
+        max_batch_size = available // kv_bytes_per_request
+        if max_batch_size < 0:
+            max_batch_size = 0
 
     total_bytes = model_bytes + max_batch_size * kv_bytes_per_request
     seconds_per_token = total_bytes / memory_bandwidth
