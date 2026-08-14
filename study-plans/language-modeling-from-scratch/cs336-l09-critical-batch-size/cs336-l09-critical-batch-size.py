@@ -1,17 +1,26 @@
 import torch
 
 def critical_batch_size(batch_sizes, steps_to_target, reached_mask):
-    examples = [
-        float(batch_sizes[i].item() * steps_to_target[i].item()) if reached_mask[i].item() else None
-        for i in range(len(batch_sizes))
-    ]
+    B = batch_sizes.detach().clone()
+    S = steps_to_target.detach().clone()
+    R = reached_mask.detach().clone()
 
-    reached_examples = [e for e in examples if e is not None]
-    reached_steps = [
-        float(steps_to_target[i].item())
-        for i in range(len(steps_to_target))
-        if reached_mask[i].item()
-    ]
+    n = B.shape[0]
+
+    examples = []
+    reached_examples = []
+    reached_steps = []
+
+    for i in range(n):
+        if bool(R[i].item()):
+            b = B[i].item()
+            s = S[i].item()
+            e = float(b * s)
+            examples.append(e)
+            reached_examples.append(e)
+            reached_steps.append(float(s))
+        else:
+            examples.append(None)
 
     min_steps = float(min(reached_steps))
     min_examples = float(min(reached_examples))
