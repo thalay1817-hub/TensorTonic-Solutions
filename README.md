@@ -335,6 +335,7 @@ Verified machine learning implementations completed on [TensorTonic](https://www
 | Calculate Squared-Error Loss Gradients | Calculate the summed squared-error loss and its derivative with respect to every prediction. | https://www.tensortonic.com/study-plans/autograd-from-scratch/autograd-l08-squared-error-loss-gradients |
 | Train a Tiny Micrograd MLP | Train a supplied scalar-output MLP with manual reverse-mode differentiation and deterministic gradient descent. | https://www.tensortonic.com/study-plans/autograd-from-scratch/autograd-l08-train-tiny-micrograd-mlp |
 | Argmax | Implement a parallel CUDA argmax reduction that returns the lowest index when multiple elements share the maximum. | https://www.tensortonic.com/study-plans/cuda-basics/cuda/argmax |
+| Argmin | Implement a parallel CUDA argmin reduction that returns the lowest index when multiple elements share the minimum. | https://www.tensortonic.com/study-plans/cuda-basics/cuda/argmin |
 | Dot Product | Implement a multi-block CUDA dot-product reduction that combines partial sums into one scalar output. | https://www.tensortonic.com/study-plans/cuda-basics/cuda/dot-product |
 | GELU | Implement exact GELU activation in CUDA with one thread per element and the device error-function intrinsic. | https://www.tensortonic.com/study-plans/cuda-basics/cuda/gelu |
 | Matrix-Vector Multiplication | Implement row-major CUDA matrix-vector multiplication with one thread computing each output row. | https://www.tensortonic.com/study-plans/cuda-basics/cuda/gemv |
