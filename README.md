@@ -453,6 +453,7 @@ Verified machine learning implementations completed on [TensorTonic](https://www
 | Vector Sum Reduction | Implement tiled vector sum reduction in Triton with register partials, atomic accumulation, and masked tail lanes. | https://www.tensortonic.com/study-plans/triton-basics/triton/triton-sum |
 | Tiled Transpose | Implement tiled matrix transpose in Triton by swapping load and store strides with masked boundary tiles. | https://www.tensortonic.com/study-plans/triton-basics/triton/triton-transpose |
 | Vector Addition | Implement elementwise vector addition in Triton with contiguous program tiles and safe masking for partial tails. | https://www.tensortonic.com/study-plans/triton-basics/triton/triton-vector-addition |
+| Vectorized Vector Add | Implement vector addition in Triton with larger per-program tiles to reduce launch overhead while masking the final tail. | https://www.tensortonic.com/study-plans/triton-basics/triton/triton-vectorized-load |
 
 View my verified ML profile: [TensorTonic profile](https://www.tensortonic.com/profile/thalay)
 <!-- tensortonic:end -->
